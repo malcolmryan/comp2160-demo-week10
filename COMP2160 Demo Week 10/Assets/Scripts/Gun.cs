@@ -5,6 +5,8 @@ using UnityEngine;
 public class Gun : MonoBehaviour
 {
     [SerializeField]
+    private Crosshair crosshair;
+    [SerializeField]
     private Bullet bulletPrefab;
 
     private Transform spawnPoint;
@@ -24,14 +26,8 @@ public class Gun : MonoBehaviour
 
     private void Aim()
     {
-        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-        float t = 0; 
-        if (plane.Raycast(ray, out t)) 
-        {
-            Vector3 point = ray.GetPoint(t);
-            Vector3 dir = point - transform.position;
-            transform.rotation = Quaternion.FromToRotation(Vector3.right, dir);
-        }
+        Vector3 dir = crosshair.transform.position - transform.position;
+        transform.rotation = Quaternion.FromToRotation(Vector3.right, dir);
     }
 
     private void Fire()
