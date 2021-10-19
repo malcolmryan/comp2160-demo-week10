@@ -21,7 +21,10 @@ public class Player : MonoBehaviour
 
     [SerializeField]
     private LayerMask groundLayer;
-
+    [SerializeField]
+    private float jumpThreshold = 0.1f; // seconds
+    private float lastTimeOnGround = float.NegativeInfinity;
+    private float lastTimePressedJump = float.NegativeInfinity;
 
     private Rigidbody2D rigidbody;
     private float moveDir = 0;
@@ -53,9 +56,20 @@ public class Player : MonoBehaviour
     {
         moveDir = Input.GetAxis(InputAxes.Horizontal);
 
-        if (IsOnGround() && Input.GetButtonDown(InputAxes.Jump))
+        if (IsOnGround())
+        {
+            lastTimeOnGround = Time.time;
+        }
+
+        if (Input.GetButtonDown(InputAxes.Jump))
+        {
+            lastTimePressedJump = Time.time;
+        }
+
+        if (Time.time - lastTimeOnGround <= jumpThreshold && Time.time - lastTimePressedJump <= jumpThreshold)
         {
             jump = true;
+            lastTimePressedJump = float.NegativeInfinity;
         }
     }
 
